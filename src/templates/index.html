@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Validation des Billets - {{ event_name }}</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Validation des Billets - {{ event_name }}</h1>
+        <form action="/" method="post" id="public_id">
+            <div class="search-box">
+                <label for="public_id">Scanner le billet (Via QR Code ou Public ID)</label>
+                <input type="text" id="public_id" name="public_id" autofocus>
+                <button type="submit">⚠️ Validation</button>
+            </div>
+        </form>
+        <div class="manual-search">
+            <h3>Recherche Manuelle</h3>
+            <form action="/search" method="post" id="searchForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first_name">Prénom</label>
+                        <input type="text" id="first_name" name="first_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Nom</label>
+                        <input type="text" id="last_name" name="last_name">
+                    </div>
+                </div>
+                <button type="submit" class="search-results">Rechercher</button>
+                <button type="button" class="button-clear" onclick="clearResults()">Effacer les résultats</button>
+            </form>
+            <script>
+                function clearResults() {
+                    const resultsDiv = document.querySelector('.results');
+                    if (resultsDiv) {
+                        resultsDiv.innerHTML = '';
+                    }
+                }
+            </script>
+        </div>
+        </form>
+
+        {% if results is not none and results[0] %}
+            <div class="results {% if results[1] and 'déjà validé' in results[1] %}warning{% elif results[1] and 'Résultat(s)' in results[1] %}search-results{% else %}success{% endif %}">
+                <p class="validation-message">{{ results[1] if results[1] else "❌ Aucun billet trouvé" }}</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Public ID</th>
+                            <th>Prénom</th>
+                            <th>Nom</th>
+                            <th>Statut</th>
+                            <th>Type de Billet</th>
+                            <th>Validé</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in results[0] %}
+                        <tr>
+                            <td>{{ ticket['Public ID'] }}</td>
+                            <td>{{ ticket['First Name'] }}</td>
+                            <td>{{ ticket['Last Name'] }}</td>
+                            <td>{{ ticket['Status'] }}</td>
+                            <td>{{ ticket['Ticket Name'] }}</td>
+                            <td>{{ "✅" if ticket['Validated'] else "❌" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% elif results is not none %}
+            <div class="validation-message results error">
+                <p>❌ Aucun billet trouvé</p>
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        document.getElementById('public_id').focus();
+    </script>
+</body>
+</html>
