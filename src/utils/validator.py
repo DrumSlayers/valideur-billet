@@ -29,16 +29,19 @@ def validate_ticket(tickets_df, public_id=None, first_name=None, last_name=None)
     # Convert results to list of dictionaries
     results_list = results.to_dict('records')
     
-    # Check if ticket was already validated
+    # Check if ticket was already validated and is Active/Valid
     for ticket in results_list:
         already_validated = validated_tickets[
             validated_tickets['Public ID'] == ticket['Public ID']
         ]
+
+        if ticket['Status'] != "ACTIVE":
+            return results_list, f"🛑 Billet annulé (Motif: {ticket['Status']} )"
         
         if not already_validated.empty:
-            validation_time = already_validated.iloc[0]['Validated At']
             ticket['Validated'] = True
-            return results_list, f"⚠️ Billet déjà validé le {validation_time}"
+            return results_list, f"⚠️ Billet déjà validé le {already_validated.iloc[0]['Validated At']}"
+
     
     # If not already validated, save first result
     ticket_data = results_list[0].copy()

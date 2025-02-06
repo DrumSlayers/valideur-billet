@@ -36,4 +36,4 @@ def search():
     return render_template('index.html', results=results, event_name=os.getenv('event_name'))
 
 if __name__ == '__main__':
-    app.run(debug=os.getenv('debug'))
+    app.run(debug=os.getenv('debug'), host="0.0.0.0")

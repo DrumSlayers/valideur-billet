@@ -19,8 +19,8 @@ def load_validated_tickets(validated_tickets_file):
         return pd.read_csv(validated_tickets_file)
     except FileNotFoundError:
         # Create empty DataFrame with required columns
-        df = pd.DataFrame(columns=['Public ID', 'First Name', 'Last Name', 'Status', 
-                                'Ticket Name', 'Validated At'])
+        df = pd.DataFrame(columns=[ 'First Name', 'Last Name', 'Email', 'Status', 
+                                'Ticket Name', 'Public ID', 'Created Date', 'Validated At'])
         df.to_csv(validated_tickets_file, index=False)
         return df
 

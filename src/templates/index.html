@@ -17,7 +17,7 @@
             </div>
         </form>
         <div class="manual-search">
-            <h3>Recherche Manuelle</h3>
+            <h3>Recherche   </h3>
             <form action="/search" method="post" id="searchForm">
                 <div class="form-row">
                     <div class="form-group">
@@ -44,8 +44,8 @@
         </form>
 
         {% if results is not none and results[0] %}
-            <div class="results {% if results[1] and 'déjà validé' in results[1] %}warning{% elif results[1] and 'Résultat(s)' in results[1] %}search-results{% else %}success{% endif %}">
-                <p class="validation-message">{{ results[1] if results[1] else "❌ Aucun billet trouvé" }}</p>
+            <div class="results {% if results[1] and 'déjà validé' in results[1] %}warning{% elif results[1] and 'annulé' in results[1] %} error {% elif results[1] and 'Résultat(s)' in results[1] %}search-results{% else %}success{% endif %}">
+                <p class="validation-message">{{ results[1] if results[1] else "❌ Aucun billet trouvé ❌" }}</p>
                 <table>
                     <thead>
                         <tr>
@@ -55,6 +55,9 @@
                             <th>Statut</th>
                             <th>Type de Billet</th>
                             <th>Validé</th>
+                            {% if 'Résultat(s)' in results[1] %}
+                            <th>Forcer Valid.</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -66,6 +69,14 @@
                             <td>{{ ticket['Status'] }}</td>
                             <td>{{ ticket['Ticket Name'] }}</td>
                             <td>{{ "✅" if ticket['Validated'] else "❌" }}</td>
+                            {% if 'Résultat(s)' in results[1] %}
+                            <td>
+                                <form action="/" method="POST" id="validate-{{ ticket['Public ID'] }}">
+                                    <input type="hidden" name="public_id" value="{{ ticket['Public ID'] }}" />
+                                    <button id="validate-{{ ticket['Public ID'] }}" type=submit >Valider</button>
+                                </form>
+                            </td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -73,7 +84,7 @@
             </div>
         {% elif results is not none %}
             <div class="validation-message results error">
-                <p>❌ Aucun billet trouvé</p>
+                <p>❌ Aucun billet trouvé ❌</p>
             </div>
         {% endif %}
     </div>
