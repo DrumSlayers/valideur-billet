@@ -9,11 +9,22 @@
 <body>
     <div class="container">
         <h1>Validation des Billets - {{ event_name }}</h1>
-        <form action="/" method="post" id="public_id">
-            <div class="search-box">
-                <label for="public_id">Scanner le billet (Via QR Code ou Public ID)</label>
-                <input type="text" id="public_id" name="public_id" autofocus>
-                <button type="submit">⚠️ Validation</button>
+            <div class="validation-box">
+                <div class="validation-scan-box">
+                    <form action="/" method="POST" id="validation-scan-box">
+                        <label for="public_id">Scanner le billet (Via QR Code ou Public ID)</label>
+                        <input type="text" name="public_id" autofocus>
+                        <button id="validation-scan-box" type="submit">⚠️ Validation</button>
+                    </form>
+                </div>
+                <div class="validation-onplace-ticket">
+                    <form action="/" method="POST" id="onplaceForm">
+                        <label for="onplace_ticket">Ajouter un billet sur place</label>
+                        <p class="onplace-count" id="onplaceCount">Billets sur place vendus : {{ onplace_count }}</p>
+                        <input type="hidden" name="public_id" value="specialqrcode:add-onplace-ticket">
+                        <button type="submit">Ajouter</button>
+                    </form>
+                </div>
             </div>
         </form>
         <div class="manual-search">

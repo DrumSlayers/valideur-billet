@@ -34,3 +34,27 @@ def save_validated_ticket(ticket, validated_tickets_file):
     # Append new validation
     validated_tickets = pd.concat([validated_tickets, pd.DataFrame([ticket])], ignore_index=True)
     validated_tickets.to_csv(validated_tickets_file, index=False)
+
+def manage_onplace_tickets(action='add'):
+    """Manage tickets created on-place"""
+    onplace_file = os.getenv('onplace_tickets_file')
+    
+    # Create file if doesn't exist
+    if not os.path.exists(onplace_file):
+        df = pd.DataFrame(columns=['Created At', 'Public ID'])
+        df.to_csv(onplace_file, index=False)
+    
+    tickets = pd.read_csv(onplace_file)
+    current_count = len(tickets)
+    
+    if action == 'add':
+        # Créer et ajouter le nouveau ticket
+        new_ticket = {
+            'Created At': datetime.now().strftime('%d-%m-%Y %H:%M:%S'),
+            'Public ID': f'ONPLACE-{current_count + 1}'
+        }
+        tickets = pd.concat([tickets, pd.DataFrame([new_ticket])], ignore_index=True)
+        tickets.to_csv(onplace_file, index=False)
+        return current_count + 1, new_ticket['Created At']
+    
+    return current_count
