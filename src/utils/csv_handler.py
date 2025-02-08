@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def load_tickets(attendees_file_path):
-    """Charge les données des billets à partir d'un fichier CSV."""
+    """Load tickets data from CSV file."""
     try:
         data = pd.read_csv(attendees_file_path)
         return data
@@ -48,7 +48,7 @@ def manage_onplace_tickets(action='add'):
     current_count = len(tickets)
     
     if action == 'add':
-        # Créer et ajouter le nouveau ticket
+        # Create / add new onplace ticket
         new_ticket = {
             'Created At': datetime.now().strftime('%d-%m-%Y %H:%M:%S'),
             'Public ID': f'ONPLACE-{current_count + 1}'
@@ -58,3 +58,15 @@ def manage_onplace_tickets(action='add'):
         return current_count + 1, new_ticket['Created At']
     
     return current_count
+
+def count_active_tickets(attendees_df):
+    """Count all ACTIVE tickets in attendees dataframe"""
+    return len(attendees_df[attendees_df['Status'] == 'ACTIVE'])
+
+def count_validated_tickets():
+    """Count all validated tickets"""
+    validated_file = os.getenv('validated_tickets_file')
+    if not os.path.exists(validated_file):
+        return 0
+    validated_df = pd.read_csv(validated_file)
+    return len(validated_df)

@@ -9,50 +9,57 @@
 <body>
     <div class="container">
         <h1>Validation des Billets - {{ event_name }}</h1>
-            <div class="validation-box">
-                <div class="validation-scan-box">
-                    <form action="/" method="POST" id="validation-scan-box">
-                        <label for="public_id">Scanner le billet (Via QR Code ou Public ID)</label>
-                        <input type="text" name="public_id" autofocus>
-                        <button id="validation-scan-box" type="submit">⚠️ Validation</button>
-                    </form>
-                </div>
-                <div class="validation-onplace-ticket">
-                    <form action="/" method="POST" id="onplaceForm">
-                        <label for="onplace_ticket">Ajouter un billet sur place</label>
-                        <p class="onplace-count" id="onplaceCount">Billets sur place vendus : {{ onplace_count }}</p>
-                        <input type="hidden" name="public_id" value="specialqrcode:add-onplace-ticket">
-                        <button type="submit">Ajouter</button>
-                    </form>
-                </div>
+        <div class="validation-box">
+            <div class="validation-scan-box">
+                <form action="/" method="POST" id="validation-scan-box">
+                    <label for="public_id">Scanner le billet (Via QR Code ou Public ID)</label>
+                    <input type="text" name="public_id" autofocus>
+                    <button id="validation-scan-box" type="submit">⚠️ Validation</button>
+                </form>
             </div>
-        </form>
-        <div class="manual-search">
-            <h3>Recherche   </h3>
-            <form action="/search" method="post" id="searchForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="first_name">Prénom</label>
-                        <input type="text" id="first_name" name="first_name">
-                    </div>
-                    <div class="form-group">
-                        <label for="last_name">Nom</label>
-                        <input type="text" id="last_name" name="last_name">
-                    </div>
-                </div>
-                <button type="submit" class="search-results">Rechercher</button>
-                <button type="button" class="button-clear" onclick="clearResults()">Effacer les résultats</button>
-            </form>
-            <script>
-                function clearResults() {
-                    const resultsDiv = document.querySelector('.results');
-                    if (resultsDiv) {
-                        resultsDiv.innerHTML = '';
-                    }
-                }
-            </script>
+            <div class="validation-onplace-ticket">
+                <form action="/" method="POST" id="onplaceForm">
+                    <label for="onplace_ticket">Ajouter un billet sur place</label>
+                    <p class="onplace-count" id="onplaceCount">Billets sur place vendus : {{ onplace_count }}</p>
+                    <input type="hidden" name="public_id" value="specialqrcode:add-onplace-ticket">
+                    <button type="submit">Ajouter</button>
+                </form>
+            </div>
         </div>
-        </form>
+
+        <div class="search-box">
+            <div class="manual-search">
+                <h3>Recherche</h3>
+                <form action="/search" method="post" id="searchForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first_name">Prénom</label>
+                            <input type="text" id="first_name" name="first_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Nom</label>
+                            <input type="text" id="last_name" name="last_name">
+                        </div>
+                    </div>
+                    <button type="submit" class="search-results">Rechercher</button>
+                    <button type="button" class="button-clear" onclick="clearResults()">Effacer les résultats</button>
+                </form>
+                <script>
+                    function clearResults() {
+                        const resultsDiv = document.querySelector('.results');
+                        if (resultsDiv) {
+                            resultsDiv.innerHTML = '';
+                        }
+                    }
+                </script>
+            </div>
+            <div class="statistics-box">
+                <h3>Statistiques</h3>
+                <p>Billets vendus : {{ tickets_count }}</p>
+                <p>Billets validés : {{ validated_tickets_count }}</p>
+            </div>
+        </div>
+
 
         {% if results is not none and results[0] %}
             <div class="results {% if results[1] and 'déjà validé' in results[1] %}warning{% elif results[1] and 'annulé' in results[1] %} error {% elif results[1] and 'Résultat(s)' in results[1] %}search-results{% else %}success{% endif %}">
