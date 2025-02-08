@@ -20,7 +20,7 @@
             <div class="validation-onplace-ticket">
                 <form action="/" method="POST" id="onplaceForm">
                     <label for="onplace_ticket">Ajouter un billet sur place</label>
-                    <p class="onplace-count" id="onplaceCount">Billets sur place vendus : {{ onplace_count }}</p>
+                    <p class="statistics-count">Billets sur place vendus : {{ onplace_count }}</p>
                     <input type="hidden" name="public_id" value="specialqrcode:add-onplace-ticket">
                     <button type="submit">Ajouter</button>
                 </form>
@@ -55,8 +55,8 @@
             </div>
             <div class="statistics-box">
                 <h3>Statistiques</h3>
-                <p>Billets vendus : {{ tickets_count }}</p>
-                <p>Billets validés : {{ validated_tickets_count }}</p>
+                <p class="statistics-count">Billets vendus : {{ tickets_count }}</p>
+                <p class="statistics-count">Billets validés : {{ validated_tickets_count }}</p>
             </div>
         </div>
 
